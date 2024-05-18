@@ -1,5 +1,7 @@
 import getpass
 from datetime import datetime
+from datetime import timedelta
+
 import os
 
 
@@ -35,23 +37,26 @@ est3_hobbies=""
 
 
 
-
-
 def VerEstudiante(email:str):
-    #print(email)
 
     if (email == est1_email ):
-        print("\nNombre: ",est1_nombre,"\nFecha: ",est1_fecha_de_nacimiento)
-        print("\nBiografia: ",est1_biografía,"\nHobbies: ",est1_hobbies)
-
+        print("\nNombre: ",est1_nombre,"\n\nFecha: ",est1_fecha_de_nacimiento)
+        print("\nBiografia: ",est1_biografía,"\n\nHobbies: ",est1_hobbies)
+        if(est1_fecha_de_nacimiento):
+            print("\nAños: ",generarEdad(est1_fecha_de_nacimiento))
     if (email == est2_email):
-        print("\nNombre: ",est2_nombre,"\nFecha: ",est2_fecha_de_nacimiento)
-        print("Biografia: ",est2_biografía,"\nHobbies: ",est2_hobbies)
-
+        print("\nNombre: ",est2_nombre,"\n\nFecha: ",est2_fecha_de_nacimiento)
+        print("\nBiografia: ",est2_biografía,"\n\nHobbies: ",est2_hobbies)
+        if(est2_fecha_de_nacimiento):
+            print("\nAños: ",generarEdad(est2_fecha_de_nacimiento))
     if (email == est3_email):
-        print("Nombre: ",est3_nombre,"\nFecha: ",est3_fecha_de_nacimiento)
-        print("Biografia: ",est3_biografía,"\nHobbies: ",est3_hobbies)
+        print("\nNombre: ",est3_nombre,"\n\nFecha: ",est3_fecha_de_nacimiento)
+        print("\nBiografia: ",est3_biografía,"\n\nHobbies: ",est3_hobbies)
+        if(est3_fecha_de_nacimiento):
+            print("\nAños: ",generarEdad(est3_fecha_de_nacimiento))
+
         
+
 
 def LimpiarConsola():
     os.system("cls")
@@ -101,8 +106,47 @@ def ValidarRangoDeNumero(inicio:int,limite:int):
     except:
         Mostrar("Error: Solamente se permiten numeros")
         return ValidarRangoDeNumero(inicio,limite)
+
+
+def generarEdad(fecha:str):
+    hoy = datetime.now()
     
+    res = datetime.strptime(fecha, "%Y-%m-%d")
     
+    edad = ((hoy - res ).days)/365
+    
+    return int(edad)
+    
+
+
+
+
+#Funcion para crear fechas devuelve una fecha    
+def CrearFechas():
+    """ Devuelve una fecha ejemplo : (2004-02-03) """
+    bandera = False
+    fecha_devolver=0
+    while bandera != True:
+        try:
+            ahora = datetime.now()
+
+            fecha = datetime.strptime(input("Ingrese una fecha en el formato AAAA-MM-DD: "),"%Y-%m-%d")
+            
+            fechaLimite= ahora-timedelta(days=365*18)
+            fechaInicial = ahora-timedelta(days=365*100)
+            
+            if(fecha >= fechaInicial and fecha <= fechaLimite):
+                fecha_devolver = fecha
+                bandera = True
+                
+        except:
+            print("Error fecha invalida")
+            os.system("pause")
+            bandera = False
+
+    return fecha_devolver.strftime("%Y-%m-%d")
+
+
 #--------------------------------    
 
 def ValidarLetras():
@@ -126,7 +170,6 @@ def CambiarCampos(campo:str,valor:str):
     #HOBBIES
     global est1_hobbies,est2_hobbies,est3_hobbies
     
-    #ESTO ES PARAMETIZABLE CON UN CALLBACK  <- PARA DESPUES    
     match (campo):
         case ("nombre"):
             if(est1_email ==email_aut): 
@@ -179,7 +222,7 @@ def EditarDatosPersonales():
                 nombre=input("Ingrese su nombre deseado: ")  
                 CambiarCampos("nombre",nombre)
             case (2):
-                fecha=input("Ingrese su Fecha de nacimiento: ")
+                fecha = CrearFechas()
                 CambiarCampos("fecha",fecha)
             case (3):
                 biografia=input("Ingrese su nueva Biografia: ")
@@ -218,7 +261,7 @@ def GestionarMiPerfil():
 def GestionarCandidatos():
     LimpiarConsola()
     CrearTitulo("GESTIONAR CANDIDATOS")
-    print("\na-Ver candidatos\n","\nb-Reportar un candidatol\n","\nc-volver\n")
+    print("\na-Ver candidatos\n","\nb-Reportar un candidato\n","\nc-volver\n")
     opcion=ValidarLetras()
     while opcion != "c":
         match (opcion):
@@ -228,23 +271,39 @@ def GestionarCandidatos():
                 Contruccion()
 
         LimpiarConsola()
-        print("\na-Ver candidatos\n","\nb-Reportar un candidatol\n","\nc-volver\n")
+        CrearTitulo("GESTIONAR CANDIDATOS")
+        print("\na-Ver candidatos\n","\nb-Reportar un candidato\n","\nc-volver\n")
         opcion=ValidarLetras()
         
     
     print("\na-Ver Candidato\n\nb-Reportar un candidato\n\nc-Volver\n")
  
 def VerCandidatos():
-    if(est1_email !=  email_aut):      
-        VerEstudiante(est1_email)    
-            
-    if(est2_email != email_aut):
-        VerEstudiante(est2_email)   
+    participantes = False
+    LimpiarConsola()
     
-    if(est3_email != email_aut):
+    if(est1_email !=  email_aut and est1_nombre != ""):      
+        CrearTitulo("Estudiante 1")
+        VerEstudiante(est1_email)
+        participantes=True    
+            
+    if(est2_email != email_aut and est2_nombre != ""):
+        CrearTitulo("Estudiante 2")
+        VerEstudiante(est2_email)   
+        participantes=True    
+        
+    
+    if(est3_email != email_aut and est3_nombre != ""):
+        CrearTitulo("Estudiante 3")
         VerEstudiante(est3_email)
-
-    PausarPrograma()
+        participantes=True    
+    
+    if(not(participantes)):
+        CrearTitulo("Proximamente candidatos disponibles")
+        print("")
+        PausarPrograma()
+    else:
+        input("\nIngrese el participantes con el que desea hacer match: ")
 
 
 def MenuPrincipal():
@@ -317,8 +376,21 @@ def IniciarSesion():
 
  
 def Inicializacion():
-    IniciarSesion()
+    LimpiarConsola()
+    CrearTitulo("Login")
+    print("\n1-Iniciar sesion\n\n2-Salir\n\n")
+    opc = input("Ingresar opcion: ")
+    while opc != "2":
+        if(opc == "1"):
+            IniciarSesion()
+        LimpiarConsola()
+        CrearTitulo("Login")
+        print("\n1-Iniciar sesion\n\n2-Salir\n\n")
     
+        opc = input("Ingrese una nueva opcion: ")
+    
+
+
 
 Inicializacion() 
 
