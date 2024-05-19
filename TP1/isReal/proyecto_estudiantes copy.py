@@ -1,5 +1,5 @@
 from getpass import getpass
-import random
+
 from datetime import datetime
 from datetime import timedelta
 
@@ -39,40 +39,9 @@ est3_biografía=""
 est3_hobbies=""
 
 
-def Ruleta():
-    def RenovarConsola():
-        LimpiarConsola()
-        CrearTitulo("Bienvenido a la ruleta")
-        print("")
-        print("La suma de las probabiliades debe dar 100")
-        print("")
-    RenovarConsola()
-    a=0
-    b=0
-    c=0
-    while not(a+b+c == 100):
-        a=int(input("Probabilidad de la persona A: "))
-        print("")
-        b=int(input("Probabilidad de la persona B: "))
-        print("")
-        c=int(input("Probabilidad de la persona C: "))
 
-        if(not(a+b+c== 100)):
-            RenovarConsola()
-            print("Ingrese nuevamente")   
-            print("") 
-            
-    numero = random.randint(1,100)
-    
-    if numero <= a:
-       print("\nPersona A ha sido elegido")
-    elif numero <= a + b:
-        print("\nPersona B ha sido elegido")
-    else:
-        print("\nPersona C ha sido elegido")
-    
-    input("")
-    
+
+
 def VerEstudiante(email:str):
 
     if (email == est1_email ):
@@ -312,7 +281,7 @@ def GestionarCandidatos():
     print("\na-Ver Candidato\n\nb-Reportar un candidato\n\nc-Volver\n")
  
 
-#VER DESPUES POR DOBLE MENU DE OPCION
+
 def VerCandidatos():
     participantes = False
     LimpiarConsola()
@@ -356,6 +325,10 @@ def VerCandidatos():
                 
             nombre = input("\nIngrese el participantes con el que desea hacer match [0-Salir]: ")
             
+             
+        
+        
+
 
 def MenuPrincipal():
     menu_reutilizable= "\n1-Gestionar mi perfil\n\n2-Gestionar Candidatos\n\n3-Matcheos\n\n4-Reportes Estadsticos\n\n0-Salir\n"
@@ -429,23 +402,18 @@ def IniciarSesion():
 def Inicializacion():
     LimpiarConsola()
     CrearTitulo("Login")
-    print("\n1-Iniciar sesion\n\n2-Ruleta\n\n0-Salir\n\n")
+    print("\n1-Iniciar sesion\n\n2-Salir\n\n")
     opc = input("Ingresar opcion: ")
-    while opc != "0":
+    while opc != "2":
         if(opc == "1"):
             IniciarSesion()
-        elif (opc == "2"):
-            Ruleta()
         LimpiarConsola()
         CrearTitulo("Login")
-        print("\n1-Iniciar sesion\n\n2-Ruleta\n\n0-Salir\n\n")
+        print("\n1-Iniciar sesion\n\n2-Salir\n\n")
     
         opc = input("Ingrese una nueva opcion: ")
     
 
-
-
-    
 
 
 Inicializacion() 
